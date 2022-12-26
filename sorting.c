@@ -6,7 +6,7 @@
 
 /*direct sorting*/
 // Function to swap the values of two variables
-extern void swap(float *a, float *b)
+static void swap(float *a, float *b)
 {
     float temp = *a;
     *a = *b;
@@ -182,6 +182,12 @@ extern int shell_sort_pt(float** pointers, int n)
     return iteration_count;
 }
 
+extern void pointerArrayInit(float *array,float **ptArray,int size)
+{
+  for (int i = 0; i < size; i++) 
+    ptArray[i] = &array[i];
+}
+
 #define TEST_SIZE 9
 
 float  data_bc[TEST_SIZE] = {10,2,3,4,5,6,7,8,9};
@@ -191,34 +197,24 @@ int iterations=0;
 
 extern void TestSort(void) 
 {
-  for (int i = 0; i < TEST_SIZE; i++) 
-  {
-    pointers[i] = &data_bc[i];
-  }
-
+  pointerArrayInit(data_bc,pointers,TEST_SIZE);
   iterations=shell_sort_pt(pointers, TEST_SIZE);
+
   for (int i = 0; i < TEST_SIZE; i++) 
-  {
     printf("pt:%.1f ", *pointers[i]);
-  }
+
   printf("iterations_bc:%i\n",iterations);
 
-
-    for (int i = 0; i < TEST_SIZE; i++) 
-  {
-    pointers[i] = &data_wc[i];
-  }
-
+  pointerArrayInit(data_wc,pointers,TEST_SIZE);
   iterations=shell_sort_pt(pointers, TEST_SIZE);
+
   for (int i = 0; i < TEST_SIZE; i++) 
-  {
     printf("pt:%.1f ", *pointers[i]);
-  }
+
   printf("iterations_wc:%i\n",iterations);
 
   for (int i = 0; i < TEST_SIZE; i++) 
-  {
     printf("dt:%.1f ", data_wc[i]);
-  }
+
   printf("\n");
 }
