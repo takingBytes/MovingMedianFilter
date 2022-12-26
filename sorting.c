@@ -1,50 +1,19 @@
 #include <stdbool.h>
 #include <stdio.h>
-#define MAX_SIZE 9
+#include "sorting.h"
 
-
-
-
+//#define MAX_SIZE 9
 
 /*direct sorting*/
 // Function to swap the values of two variables
-void swap(float *a, float *b)
+extern void swap(float *a, float *b)
 {
     float temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Function to sort the values in the array using bubble sort
-void bubble_sort(float *arr, int n)
-{
-    /*
-    WC Time: O(n^2)
-    BC Time: O(n)
-
-    WC Space: O(1)
-    no additional memory needed, with higher sizes
-    */
-
-    bool swapped=false;
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (int j = 0; j < n - i - 1; j++)
-        {
-            if (*(arr + j) > *(arr + j + 1))
-            {
-                swap(arr + j, arr + j + 1);
-                swapped=true;
-            }
-            if (!swapped)  // If the flag is still 0 after the inner loop, the array is sorted
-            {
-                break;
-            }
-        }
-    }
-}
-
-void shell_sort(float *arr, int size)
+extern void shell_sort(float *arr, int size)
 {
     /*
     WC Time: O(n^2)
@@ -77,15 +46,43 @@ void shell_sort(float *arr, int size)
 }
 
 
+// Function to sort the values in the array using bubble sort
+void bubble_sort(float *arr, int n)
+{
+    /*
+    WC Time: O(n^2)
+    BC Time: O(n)
+
+    WC Space: O(1)
+    no additional memory needed, with higher sizes
+    */
+
+    bool swapped=false;
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (*(arr + j) > *(arr + j + 1))
+            {
+                swap(arr + j, arr + j + 1);
+                swapped=true;
+            }
+
+            if (!swapped)  // If the flag is still 0 after the inner loop, the array is sorted
+              break;
+        }
+    }
+}
+
 /*pointer based sorting*/
-void swap_pt(float **a, float **b)
+static void swap_pt(float **a, float **b)
 { 
     float *temp = *a;
     *a = *b;
     *b = temp;
 }
 
-int bubble_sort_pt(float** pointers, int n) 
+extern int bubble_sort_pt(float** pointers, int n) 
 {
   /*
   wc iteration count for inner loop:
@@ -131,7 +128,7 @@ if ((pointers == NULL)||(n == 0))
     return iteration_count;
 }
 
-int shell_sort_pt(float** pointers, int n)
+extern int shell_sort_pt(float** pointers, int n)
 {
   /* Knuth sequence:  gap(0..i)=[1, 4, 13, 40,...]
   wc iteration count for inner loop:
@@ -179,7 +176,7 @@ int shell_sort_pt(float** pointers, int n)
             pointers[j] = temp;
         }
 
-        /* calculate next gap using Knuth sequence */
+        /* calculate >--> next >--> gap using Knuth sequence */
         gap = (gap - 1) / 3;
     }
     return iteration_count;
@@ -190,7 +187,7 @@ float  data_bc[MAX_SIZE] = {10,2,3,4,5,6,7,8,9};
 float  data_wc[MAX_SIZE] = {9,8,7,6,5,4,3,2,1};
 float* pointers[MAX_SIZE];
 int iterations=0;
-
+/*
 int main() {
 
   for (int i = 0; i < MAX_SIZE; i++) 
@@ -225,3 +222,4 @@ int main() {
   printf("\n");
   return 0;
 }
+*/

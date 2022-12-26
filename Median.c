@@ -1,12 +1,11 @@
 #include <stdbool.h>
 #include <stdio.h>
-
-
+#include "sorting.h"
 
 // Function to find the median of an array of values
 float median(float* arr, int n)
 {
-    shell_sort_2(arr, n);
+    shell_sort(arr, n);
     return arr[n / 2];
 }
 
