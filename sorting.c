@@ -182,44 +182,43 @@ extern int shell_sort_pt(float** pointers, int n)
     return iteration_count;
 }
 
-/*
-float  data_bc[MAX_SIZE] = {10,2,3,4,5,6,7,8,9};
-float  data_wc[MAX_SIZE] = {9,8,7,6,5,4,3,2,1};
-float* pointers[MAX_SIZE];
+#define TEST_SIZE 9
+
+float  data_bc[TEST_SIZE] = {10,2,3,4,5,6,7,8,9};
+float  data_wc[TEST_SIZE] = {9,8,7,6,5,4,3,2,1};
+float* pointers[TEST_SIZE];
 int iterations=0;
 
-int main() {
-
-  for (int i = 0; i < MAX_SIZE; i++) 
+extern void TestSort(void) 
+{
+  for (int i = 0; i < TEST_SIZE; i++) 
   {
     pointers[i] = &data_bc[i];
   }
 
-  iterations=shell_sort_pt(pointers, MAX_SIZE);
-  for (int i = 0; i < MAX_SIZE; i++) 
+  iterations=shell_sort_pt(pointers, TEST_SIZE);
+  for (int i = 0; i < TEST_SIZE; i++) 
   {
     printf("pt:%.1f ", *pointers[i]);
   }
   printf("iterations_bc:%i\n",iterations);
 
 
-    for (int i = 0; i < MAX_SIZE; i++) 
+    for (int i = 0; i < TEST_SIZE; i++) 
   {
     pointers[i] = &data_wc[i];
   }
 
-  iterations=shell_sort_pt(pointers, MAX_SIZE);
-  for (int i = 0; i < MAX_SIZE; i++) 
+  iterations=shell_sort_pt(pointers, TEST_SIZE);
+  for (int i = 0; i < TEST_SIZE; i++) 
   {
     printf("pt:%.1f ", *pointers[i]);
   }
   printf("iterations_wc:%i\n",iterations);
 
-  for (int i = 0; i < MAX_SIZE; i++) 
+  for (int i = 0; i < TEST_SIZE; i++) 
   {
     printf("dt:%.1f ", data_wc[i]);
   }
   printf("\n");
-  return 0;
 }
-*/

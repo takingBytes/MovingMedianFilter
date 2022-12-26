@@ -14,5 +14,7 @@ int main(void)
     float med = median(arr, MAX_SIZE);
     printf("The median of the array is: %f\n", med);
 
+    TestSort();
+
     return 0;
 }
