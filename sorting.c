@@ -182,12 +182,12 @@ extern int shell_sort_pt(float** pointers, int n)
     return iteration_count;
 }
 
-
+/*
 float  data_bc[MAX_SIZE] = {10,2,3,4,5,6,7,8,9};
 float  data_wc[MAX_SIZE] = {9,8,7,6,5,4,3,2,1};
 float* pointers[MAX_SIZE];
 int iterations=0;
-/*
+
 int main() {
 
   for (int i = 0; i < MAX_SIZE; i++) 
