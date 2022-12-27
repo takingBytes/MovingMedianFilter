@@ -5,8 +5,8 @@
 #include "median.h"
 #include "sorting.h"
 
-#define MAX_SIZE 13
-#define MAX_RUN 10000
+#define MAX_SIZE 9
+#define MAX_RUN 100
 
 //float arr[MAX_SIZE] = {1,2,3,4,5,6,7,8,9};
 float arr[MAX_SIZE] = {9,8,7,6,5,4,3,2,1};
@@ -35,20 +35,19 @@ void main(void)
     med = medianPt(ptArr, MAX_SIZE);
     //printf("\n");
 
-    
-  /*  for (int i = 0; i < MAX_SIZE; i++) 
+    printf("pt");  
+    for (int i = 0; i < MAX_SIZE; i++) 
     {
-        printf("pt:%.1f ", *ptArr[i]);
+        printf(";%.f ", *ptArr[i]);
     }
     printf("\n");
     
-*/
+
    /* for (int i = 0; i < MAX_SIZE; i++) 
     {
         printf("dt:%.1f ", arr[i]);
-    }
-    printf("\n");
-    */
+    }*/
+
 
    
    //printf("raw;%.0f med;%.0f\n", raw,med);

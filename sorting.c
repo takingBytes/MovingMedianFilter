@@ -100,64 +100,80 @@ extern int bubble_sort_pt(float** pointers, int n)
   wc swap count with *one* changed value: 
   O(n)=(n-1)          e.g.: n=9 -> WC=8;
   */
-
 if ((pointers == NULL)||(n == 0))
 {
   return 0;
 }
-
     int iteration_count = 0; 
-    bool swapped=false;
+    // Perform bubble sort
     for (int i = 0; i < n - 1; i++)
     {
+        bool swapped = false;
         for (int j = 0; j < n - i - 1; j++)
         {
             if (*pointers[j] > *pointers[j + 1])
             {   
                 iteration_count++;
                 swap_pt(&pointers[j], &pointers[j + 1]);
-                swapped=true;
+                swapped = true;
             }
         }
-
-        if (!swapped)  /* If flag is still false, array is sorted */
+        if (!swapped)
         {
-            break;
+           break;
         }
     }
     return iteration_count;
 }
+
 extern int insertion_sort_pt(float** pointers, int n) 
 {
-  int iteration_count = 0; 
 
-  // Check for invalid input
-  if ((pointers == NULL)||(n == 0)) {
+  /*
+  wc iteration count for inner loop:
+  O(n)= n(n-1)/2      e.g.: n=9 -> WC=36;
+
+  bc iteration count for inner loop:
+  O(n)= n-1           e.g.: n=9 -> WC=8;
+
+  wc swap count:
+  O(n)= n(n-1)/2      e.g.: n=9 -> WC=36;
+
+  bc swap count: 
+  O(n)=0              e.g.: n=9 -> WC=0;
+
+  wc swap count with *one* changed value: 
+  O(n)=(n-1)          e.g.: n=9 -> WC=8;
+  */
+
+   int iteration_count = 0; 
+
+  if ((pointers == NULL)||(n == 0)) 
+  {
     return 0;
   }
 
-  // Perform insertion sort
   for (int i = 1; i < n; i++) 
   {
     float* current_value = pointers[i];
     int current_index = i;
-
-    // Shift all elements to the right of the current element
-    // until we find the correct position for the current element
+    /*
+        Shift all elements to the right of the current element
+        until we find the correct position for the current element
+    */
     while (current_index > 0 && *pointers[current_index - 1] > *current_value) 
     {
       swap_pt(&pointers[current_index], &pointers[current_index - 1]);
       current_index--;
       iteration_count++;
     }
-
-    // Insert the current element into its correct position
+    /* Insert the current element into its correct position*/
     pointers[current_index] = current_value;
   }
-
-  // Return the number of iterations required to sort the array
+  /* Return the number of iterations required to sort the array*/
   return iteration_count;
 }
+
 extern int shell_sort_pt(float** pointers, int n)
 {
   /* Knuth sequence:  gap(0..i)=[1, 4, 13, 40,...]
@@ -207,7 +223,7 @@ extern int shell_sort_pt(float** pointers, int n)
             pointers[current_index] = current_value;
         }
 
-        /* calculate >--> next >--> gap using Knuth sequence */
+        /* calculate next gap using Knuth sequence */
         gap = (gap - 1) / 3;
     }
     return iteration_count;
