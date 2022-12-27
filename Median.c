@@ -3,16 +3,30 @@
 #include "sorting.h"
 #include "median.h"
 
-float median(float* arr, int n)
-{
-    shell_sort(arr, n);
-    return arr[n / 2];
-}
-
 float medianPt(float** ptArr, int n)
 {
-    printf("%i;",shell_sort_pt(ptArr, n));
-    return *ptArr[n / 2];
+    float median= 0;
+    int sortingIterations = 0;
+    int middle = 0;
+
+    if ((ptArr == NULL)||(n == 0))
+    {
+        return 0;
+    }
+
+    middle = n / 2;
+    sortingIterations = shell_sort_pt(ptArr, n);
+
+    if (n % 2) 
+    {
+        median = *ptArr[middle];
+    } else 
+    {
+        median= (*ptArr[middle] + *ptArr[middle - 1]) / 2;
+    }
+
+    printf("%i;",sortingIterations);
+    return median;
 }
 
 
