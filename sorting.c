@@ -127,7 +127,37 @@ if ((pointers == NULL)||(n == 0))
     }
     return iteration_count;
 }
+extern int insertion_sort_pt(float** pointers, int n) 
+{
+  int iteration_count = 0; 
 
+  // Check for invalid input
+  if ((pointers == NULL)||(n == 0)) {
+    return 0;
+  }
+
+  // Perform insertion sort
+  for (int i = 1; i < n; i++) 
+  {
+    float* current_value = pointers[i];
+    int current_index = i;
+
+    // Shift all elements to the right of the current element
+    // until we find the correct position for the current element
+    while (current_index > 0 && *pointers[current_index - 1] > *current_value) 
+    {
+      swap_pt(&pointers[current_index], &pointers[current_index - 1]);
+      current_index--;
+      iteration_count++;
+    }
+
+    // Insert the current element into its correct position
+    pointers[current_index] = current_value;
+  }
+
+  // Return the number of iterations required to sort the array
+  return iteration_count;
+}
 extern int shell_sort_pt(float** pointers, int n)
 {
   /* Knuth sequence:  gap(0..i)=[1, 4, 13, 40,...]
@@ -166,14 +196,15 @@ extern int shell_sort_pt(float** pointers, int n)
         /* Perform gap-insertion sort */
         for (int i = gap; i < n; i++)
         {   
-            float *temp = pointers[i];
-            int j;
-            for (j = i; j >= gap && *pointers[j - gap] > *temp; j -= gap)
+            float* current_value = pointers[i];
+            int current_index = i;
+            while (current_index >=gap && *pointers[current_index - gap] > *current_value) 
             {
-                swap_pt(&pointers[j], &pointers[j - gap]);
+                swap_pt(&pointers[current_index], &pointers[current_index - gap]);
+                current_index-= gap;
                 iteration_count++;
             }
-            pointers[j] = temp;
+            pointers[current_index] = current_value;
         }
 
         /* calculate >--> next >--> gap using Knuth sequence */
@@ -181,7 +212,6 @@ extern int shell_sort_pt(float** pointers, int n)
     }
     return iteration_count;
 }
-
 extern void pointerArrayInit(float *array,float **ptArray,int size)
 {
   for (int i = 0; i < size; i++) 
@@ -190,7 +220,7 @@ extern void pointerArrayInit(float *array,float **ptArray,int size)
 
 #define TEST_SIZE 9
 
-float  data_bc[TEST_SIZE] = {10,2,3,4,5,6,7,8,9};
+float  data_bc[TEST_SIZE] = {1,2,3,4,5,6,7,8,9};
 float  data_wc[TEST_SIZE] = {9,8,7,6,5,4,3,2,1};
 float* pointers[TEST_SIZE];
 int iterations=0;
