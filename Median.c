@@ -3,30 +3,43 @@
 #include "sorting.h"
 #include "median.h"
 
-float medianPt(float** ptArr, int n)
+void MedianInit(median* this, float* arr,float** ptArr, unsigned int n)
 {
-    float median= 0;
-    int sortingIterations = 0;
-    int middle = 0;
-
-    if ((ptArr == NULL)||(n == 0))
+    if ((arr == NULL)||(ptArr == NULL)||(n == 0))
     {
-        return 0;
+        return;
     }
 
-    middle = n / 2;
-    sortingIterations = shell_sort_pt(ptArr, n);
+    pointerArrayInit(arr,ptArr,n);
 
-    if (n % 2) 
+    this->arr=arr;
+    this->ptArr=ptArr;
+    this->size=n;
+    this->cnt=0;
+}
+
+
+extern float MedianFilter(median* this,float in)
+{
+    float median= 0;
+    unsigned int sortingIterations = 0;
+    unsigned int middle = 0;
+
+
+    this->arr[this->cnt] = in;
+    this->cnt = (this->cnt + 1) % this->size;
+
+    middle = this->size / 2;
+    sortingIterations = shell_sort_pt(this->ptArr, this->size);
+
+    if (this->size % 2) 
     {
-        median = *ptArr[middle];
+        median = *this->ptArr[middle];
     } else 
     {
-        median= (*ptArr[middle] + *ptArr[middle - 1]) / 2;
+        median= (*this->ptArr[middle] + *this->ptArr[middle - 1]) / 2;
     }
 
     printf("%i;",sortingIterations);
     return median;
 }
-
-
