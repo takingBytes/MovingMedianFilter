@@ -10,7 +10,7 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsig
         return;
     }
 
-    pointerArrayInit(buffer,ptBufferSorted,size);
+    SortPtBufferInit(buffer,ptBufferSorted,size);
     this->buffer=buffer;
     this->ptBufferSorted=ptBufferSorted;
     this->size=size;
@@ -26,7 +26,7 @@ extern float MedianFilter(median* this,float input)
     this->index = (this->index + 1) % this->size;
 
     middleIndex = this->size / 2;
-    this->iterationCount = shell_sort_pt(this->ptBufferSorted, this->size);
+    this->iterationCount = SortPt(this->ptBufferSorted,SHELL, this->size);
 
     if (this->size % 2) 
     {
