@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "sorting.h"
 
-static unsigned int SortInsertionPt(float** ptBufferSorted,SortType type, unsigned int n);
+static unsigned int SortInsertionPt(float** ptBufferSorted,Sorter type, unsigned int n);
 static unsigned int SortBubblePt(float** ptBufferSorted, unsigned int n) ;
 
 extern void SortPtBufferInit(float *bufferUnsorted,float **ptBufferSorted,unsigned int size)
@@ -11,7 +11,7 @@ extern void SortPtBufferInit(float *bufferUnsorted,float **ptBufferSorted,unsign
     ptBufferSorted[i] = &bufferUnsorted[i];
 }
 
-extern unsigned int SortPt(float** ptBufferSorted,SortType type, unsigned int n)
+extern unsigned int SortPt(float** ptBufferSorted,Sorter type, unsigned int n)
 {
     if ((ptBufferSorted == NULL)||(n == 0))
     {
@@ -77,7 +77,7 @@ if ((ptBufferSorted == NULL)||(n == 0))
     return iterationCount;
 }
 
-static unsigned int SortInsertionPt(float** ptBufferSorted,SortType type, unsigned int n)
+static unsigned int SortInsertionPt(float** ptBufferSorted,Sorter type, unsigned int n)
 {
     /* 
     When  type == SHELL
@@ -128,40 +128,36 @@ static unsigned int SortInsertionPt(float** ptBufferSorted,SortType type, unsign
 
     if (type==SHELL)
     {
-        /* calculate initial gap using Knuth sequence to use with Shell-Sort*/
+        /* calculate initial gap using Knuth sequence for Shell-Sort */
         while (gap < n / 3)
         {
             gap = gap * 3 + 1;
         }
     }else
-    {   /* use standrt gap=1 for Insertion-Sort*/
+    {   /* use initial gap standard gap=1 for Insertion-Sort */
         gap = 1;
     }
 
     while (gap > 0)
     {
-        for (int i = gap; i < n; i++)
+        for (unsigned int  index = gap; index < n; index++)
         {   
-            float* current_value = ptBufferSorted[i];
-            unsigned int currentIndex = i;
+            float* currentElement = ptBufferSorted[index];
 
-            /*
-                Shift all elements to the right of the current element
-                until we find the correct position for the current element
-            */
+            /* compare current element with element 'gap' positions left. 
+            If left element is larger, swap them until correct position is found. */
 
-            while (currentIndex >=gap && *ptBufferSorted[currentIndex - gap] > *current_value) 
+            while (index >=gap && *ptBufferSorted[index - gap] > *currentElement) 
             {
-                SwapPtPt(&ptBufferSorted[currentIndex], &ptBufferSorted[currentIndex - gap]);
-                currentIndex-= gap;
+                SwapPtPt(&ptBufferSorted[index], &ptBufferSorted[index - gap]);
+                index-= gap;
                 iterationCount++;
             }
-            ptBufferSorted[currentIndex] = current_value;
+            ptBufferSorted[index] = currentElement;
         }
 
-        /* 
-            calculate next gap, using Knuth sequence:
-        */
+        /* calculate next gap, using Knuth sequence: */
+
         if (gap!=1)
         {
             gap = (gap - 1) / 3;
