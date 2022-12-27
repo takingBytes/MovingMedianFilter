@@ -3,43 +3,42 @@
 #include "sorting.h"
 #include "median.h"
 
-void MedianInit(median* this, float* arr,float** ptArr, unsigned int n)
+extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsigned int size)
 {
-    if ((arr == NULL)||(ptArr == NULL)||(n == 0))
+    if ((buffer == NULL)||(ptBufferSorted == NULL)||(size == 0))
     {
         return;
     }
 
-    pointerArrayInit(arr,ptArr,n);
-
-    this->arr=arr;
-    this->ptArr=ptArr;
-    this->size=n;
-    this->cnt=0;
+    pointerArrayInit(buffer,ptBufferSorted,size);
+    this->buffer=buffer;
+    this->ptBufferSorted=ptBufferSorted;
+    this->size=size;
+    this->index=0;
 }
 
-
-extern float MedianFilter(median* this,float in)
+extern float MedianFilter(median* this,float input)
 {
-    float median= 0;
-    unsigned int sortingIterations = 0;
-    unsigned int middle = 0;
+    float filteredOutput= 0;
+    unsigned int middleIndex = 0;
 
+    this->buffer[this->index] = input;
+    this->index = (this->index + 1) % this->size;
 
-    this->arr[this->cnt] = in;
-    this->cnt = (this->cnt + 1) % this->size;
-
-    middle = this->size / 2;
-    sortingIterations = shell_sort_pt(this->ptArr, this->size);
+    middleIndex = this->size / 2;
+    this->iterationCount = shell_sort_pt(this->ptBufferSorted, this->size);
 
     if (this->size % 2) 
     {
-        median = *this->ptArr[middle];
+        filteredOutput = *this->ptBufferSorted[middleIndex];
     } else 
     {
-        median= (*this->ptArr[middle] + *this->ptArr[middle - 1]) / 2;
+        filteredOutput= (*this->ptBufferSorted[middleIndex] + *this->ptBufferSorted[middleIndex - 1]) / 2;
     }
+    return filteredOutput;
+}
 
-    printf("%i;",sortingIterations);
-    return median;
+extern unsigned int MedianLastIterationCountGet(median* this)
+{
+    return this->iterationCount;
 }
