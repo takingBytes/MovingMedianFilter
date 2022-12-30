@@ -18,9 +18,18 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsig
     this->ptBufferSorted=ptBufferSorted;
     this->size=size;
     this->index=0;
+    this->initialGap=1;
 
     MedianBufferClear(this);
     MedianBufferInit(this);
+
+
+    /* calculate initial gap using Knuth sequence for Shell-Sort */
+    while (this->initialGap < this->size / 3)
+    {
+        this->initialGap = this->initialGap * 3 + 1;
+    }
+
 }
 
 extern float MedianFilter(median* this,float input)
@@ -54,7 +63,7 @@ static float MedianValueGet(median* this)
     return middleValue;
 }
 
-extern unsigned int MedianLastIterationCountGet(median* this)
+extern unsigned int MedianIterationGet(median* this)
 {
     if (this == NULL)
         return 0;
@@ -98,35 +107,12 @@ static void MedianBufferSort(median* this)
     wc swap count with *one* changed value: 
     O(n)= (n-1)                         e.g.: n=9 -> WC=8;
     */
-    /*
-    When  type == INSERTION
 
-    wc iteration count for inner loop:
-    O(n)= n(n-1)/2      e.g.: n=9 -> WC=36;
-
-    bc iteration count for inner loop:
-    O(n)= n-1           e.g.: n=9 -> WC=8;
-
-    wc swap count:
-    O(n)= n(n-1)/2      e.g.: n=9 -> WC=36;
-
-    bc swap count: 
-    O(n)=0              e.g.: n=9 -> WC=0;
-
-    wc swap count with *one* changed value: 
-    O(n)=(n-1)          e.g.: n=9 -> WC=8;
-    */
     if (this == NULL)
         return;
 
-    unsigned int gap=1;
     this->iterationCount = 0; 
-
-    /* calculate initial gap using Knuth sequence for Shell-Sort */
-    while (gap < this->size / 3)
-    {
-        gap = gap * 3 + 1;
-    }
+    unsigned int gap=this->initialGap;
 
     while (gap > 0)
     {
