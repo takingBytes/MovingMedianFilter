@@ -53,18 +53,14 @@ extern float MedianFilter(median* this,float input)
 
 static float MedianValueGet(median* this)
 {
-    float middleValue;
-
     if (this->size % 2) 
-    {
-        middleValue = *this->ptBufferSorted[(this->size / 2)];
+    {   /* return the middle value */ 
+        return *this->ptBufferSorted[(this->size / 2)];
     } 
     else
-    {
-        middleValue = (*this->ptBufferSorted[(this->size / 2)] + *this->ptBufferSorted[(this->size / 2) - 1]) / 2;
+    {   /* return the average of the two middle values */
+        return (*this->ptBufferSorted[(this->size / 2)] + *this->ptBufferSorted[(this->size / 2) - 1]) / 2;
     }
-
-    return middleValue;
 }
 
 extern unsigned int MedianIterationGet(median* this)
