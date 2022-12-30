@@ -27,17 +27,6 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsig
     MedianSortingGapInit(this);
 }
 
-static void MedianSortingGapInit(median* this)
-{
-    /* calculate initial gap using Knuth sequence for Shell-Sort */
-    
-    this->initialKnuthGap=1;
-    while (this->initialKnuthGap < this->size / 3)
-    {
-        this->initialKnuthGap = this->initialKnuthGap * 3 + 1;
-    }    
-}
-
 extern float MedianFilter(median* this,float input)
 {
     if (this == NULL)
@@ -53,6 +42,24 @@ extern float MedianFilter(median* this,float input)
     return MedianValueGet(this);
 }
 
+extern unsigned int MedianIterationGet(median* this)
+{
+    if (this == NULL)
+        return 0;
+
+    return this->iterationCount;
+}
+
+static void MedianSortingGapInit(median* this)
+{
+    /* calculate initial gap using Knuth sequence for Shell-Sort */
+    this->initialKnuthGap=1;
+    while (this->initialKnuthGap < this->size / 3)
+    {
+        this->initialKnuthGap = this->initialKnuthGap * 3 + 1;
+    }    
+}
+
 static float MedianValueGet(median* this)
 {
     if (this->size % 2) 
@@ -63,14 +70,6 @@ static float MedianValueGet(median* this)
     {   /* return the average of the two middle values */
         return (*this->ptBufferSorted[(this->size / 2)] + *this->ptBufferSorted[(this->size / 2) - 1]) / 2;
     }
-}
-
-extern unsigned int MedianIterationGet(median* this)
-{
-    if (this == NULL)
-        return 0;
-
-    return this->iterationCount;
 }
 
 static void MedianBufferClear(median* this)
@@ -123,8 +122,7 @@ static void MedianBufferShellSort(median* this)
         {   
             float* currentElement = this->ptBufferSorted[index];
 
-            /* compare current element with element 'gap' positions left. 
-            If left element is larger, swap them until correct position is found. */
+            /* If left element is larger, swap until correct position is found. */
             while (index >=gap && *this->ptBufferSorted[index - gap] > *currentElement) 
             { 
                 SwapPtPt(&this->ptBufferSorted[index - gap],&this->ptBufferSorted[index]);
@@ -134,7 +132,7 @@ static void MedianBufferShellSort(median* this)
             this->ptBufferSorted[index] = currentElement;
         }
 
-        /* calculate next gap, using Knuth sequence: */
+        /* calculate next gap, using Knuth sequence */
         if (gap!=1)
         {
             gap = (gap - 1) / 3;
