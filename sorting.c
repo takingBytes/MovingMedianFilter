@@ -4,11 +4,14 @@
 
 static unsigned int SortInsertionPt(float** ptBufferSorted,Sorter type, unsigned int n);
 static unsigned int SortBubblePt(float** ptBufferSorted, unsigned int n) ;
+static unsigned int SortInsertionPt(float** ptBufferSorted,Sorter type, unsigned int n);
 
 extern void SortPtBufferInit(float *bufferUnsorted,float **ptBufferSorted,unsigned int size)
 {
-  for (unsigned int i = 0; i < size; i++) 
-    ptBufferSorted[i] = &bufferUnsorted[i];
+    for (unsigned int i = 0; i < size; i++) 
+    {
+        ptBufferSorted[i] = &bufferUnsorted[i];
+    }
 }
 
 extern unsigned int SortPt(float** ptBufferSorted,Sorter type, unsigned int n)
@@ -51,28 +54,27 @@ O(n)=0              e.g.: n=9 -> WC=0;
 wc swap count with *one* changed value: 
 O(n)=(n-1)          e.g.: n=9 -> WC=8;
 */
+
 if ((ptBufferSorted == NULL)||(n == 0))
 {
   return 0;
 }
     unsigned int iterationCount = 0; 
-    // Perform bubble sort
-    for (unsigned int i = 0; i < n - 1; i++)
+
+    for (unsigned int index = 0; index < n - 1; index++)
     {
         bool swapped = false;
-        for (unsigned int j = 0; j < n - i - 1; j++)
+        for (unsigned int position = 0; position < n - index - 1; position++)
         {
-            if (*ptBufferSorted[j] > *ptBufferSorted[j + 1])
+            if (*ptBufferSorted[position] > *ptBufferSorted[position + 1])
             {   
-                iterationCount++;
-                SwapPtPt(&ptBufferSorted[j], &ptBufferSorted[j + 1]);
+                SwapPtPt(&ptBufferSorted[position], &ptBufferSorted[position + 1]);
                 swapped = true;
+                iterationCount++;
             }
         }
         if (!swapped)
-        {
            break;
-        }
     }
     return iterationCount;
 }
@@ -147,17 +149,18 @@ static unsigned int SortInsertionPt(float** ptBufferSorted,Sorter type, unsigned
             /* compare current element with element 'gap' positions left. 
             If left element is larger, swap them until correct position is found. */
 
+            // Shift elements to the right until the value to the left is 
             while (index >=gap && *ptBufferSorted[index - gap] > *currentElement) 
-            {
-                SwapPtPt(&ptBufferSorted[index], &ptBufferSorted[index - gap]);
+            {   // Shift elements to the right to make space for the current element
+                SwapPtPt(&ptBufferSorted[index - gap],&ptBufferSorted[index]);
                 index-= gap;
                 iterationCount++;
             }
+            /* Insert the current element into the correct position */
             ptBufferSorted[index] = currentElement;
         }
 
         /* calculate next gap, using Knuth sequence: */
-
         if (gap!=1)
         {
             gap = (gap - 1) / 3;
