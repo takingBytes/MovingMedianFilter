@@ -122,16 +122,12 @@ static void MedianBufferShellSort(median* this)
 
             /* compare current element with element 'gap' positions left. 
             If left element is larger, swap them until correct position is found. */
-
-            // Shift elements to the right until the value to the left is 
             while (index >=gap && *this->ptBufferSorted[index - gap] > *currentElement) 
-            {   // Shift elements to the right to make space for the current element
-
+            { 
                 SwapPtPt(&this->ptBufferSorted[index - gap],&this->ptBufferSorted[index]);
                 index-= gap;
                 this->iterationCount++;
             }
-            /* Insert the current element into the correct position */
             this->ptBufferSorted[index] = currentElement;
         }
 
