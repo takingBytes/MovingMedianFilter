@@ -3,11 +3,12 @@
 #include "median.h"
 
 static void MedianBufferClear(median* this);
-static void MedianBufferSort(median* this);
+static void MedianBufferShellSort(median* this);
 static void MedianBufferInit(median* this);
 static float MedianValueGet(median* this);
 
 static void SwapPtPt(float **a, float **b);
+static void MedianSortingGapInit(median* this);
 
 extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsigned int size)
 {
@@ -22,14 +23,17 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsig
 
     MedianBufferClear(this);
     MedianBufferInit(this);
+    MedianSortingGapInit(this);
 
+}
 
+static void MedianSortingGapInit(median* this)
+{
     /* calculate initial gap using Knuth sequence for Shell-Sort */
     while (this->initialGap < this->size / 3)
     {
         this->initialGap = this->initialGap * 3 + 1;
     }
-
 }
 
 extern float MedianFilter(median* this,float input)
@@ -42,7 +46,7 @@ extern float MedianFilter(median* this,float input)
     /*increment index*/
     this->index = (this->index + 1) % this->size;
 
-    MedianBufferSort(this);
+    MedianBufferShellSort(this);
 
     return MedianValueGet(this);
 }
@@ -86,7 +90,7 @@ static void MedianBufferInit(median* this)
         this->ptBufferSorted[i] = &this->buffer[i];
 }
 
-static void MedianBufferSort(median* this)
+static void MedianBufferShellSort(median* this)
 {
     /* 
     When  type == SHELL
