@@ -19,21 +19,23 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsig
     this->ptBufferSorted=ptBufferSorted;
     this->size=size;
     this->index=0;
-    this->initialGap=1;
+    this->initialKnuthGap=1;
+
 
     MedianBufferClear(this);
     MedianBufferInit(this);
     MedianSortingGapInit(this);
-
 }
 
 static void MedianSortingGapInit(median* this)
 {
     /* calculate initial gap using Knuth sequence for Shell-Sort */
-    while (this->initialGap < this->size / 3)
+    
+    this->initialKnuthGap=1;
+    while (this->initialKnuthGap < this->size / 3)
     {
-        this->initialGap = this->initialGap * 3 + 1;
-    }
+        this->initialKnuthGap = this->initialKnuthGap * 3 + 1;
+    }    
 }
 
 extern float MedianFilter(median* this,float input)
@@ -88,7 +90,7 @@ static void MedianBufferInit(median* this)
 
 static void MedianBufferShellSort(median* this)
 {
-    /* 
+    /*
     When  type == SHELL
 
     Knuth sequence:  gap(0..i)=[1, 4, 13, 40,...]
@@ -105,14 +107,15 @@ static void MedianBufferShellSort(median* this)
     O(n)=0                              e.g.: n=9 -> WC=0;        
 
     wc swap count with *one* changed value: 
-    O(n)= (n-1)                         e.g.: n=9 -> WC=8;
+    O(n)= (n-1)                         e.g.: n=9 -> WC=8; 
     */
 
     if (this == NULL)
         return;
 
-    this->iterationCount = 0; 
-    unsigned int gap=this->initialGap;
+    this->iterationCount = 0;
+
+    unsigned int gap=this->initialKnuthGap;
 
     while (gap > 0)
     {

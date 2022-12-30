@@ -8,7 +8,7 @@ typedef struct Median
     unsigned int size;
     unsigned int index;
     unsigned int iterationCount;
-    unsigned int initialGap;
+    unsigned int initialKnuthGap;
 } median;
 
 extern median Median;
