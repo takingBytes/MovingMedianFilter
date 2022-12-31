@@ -5,16 +5,16 @@ typedef struct Median
 {
     float* buffer;
     float** ptBufferSorted;
-    unsigned int size;
-    unsigned int index;
-    unsigned int iterationCount;
-    unsigned int initialKnuthGap;
+    uint8_t size;
+    uint8_t index;
+    uint8_t iterationCount;
+    uint8_t initialKnuthGap;
 } median;
 
 extern median Median;
 
-extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsigned int size);
+extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, uint16_t size);
 extern float MedianFilter(median* this,float input);
-extern unsigned int MedianIterationGet(median* this);
+extern uint8_t MedianIterationGet(median* this);
 
 #endif

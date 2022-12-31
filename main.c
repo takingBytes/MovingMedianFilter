@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -18,7 +19,7 @@ void main(void)
     srand(time(NULL));
 
     MedianInit(&filter,buffArr,ptArr,MAX_SIZE);
-    for (unsigned int i = 0; i < MAX_RUN; i++) 
+    for (uint16_t  i = 0; i < MAX_RUN; i++) 
     {
         raw =(float) (10* (float)rand() / (float)(RAND_MAX));
 
@@ -26,7 +27,7 @@ void main(void)
         printf("iter->%i;",MedianIterationGet(&filter));
 
         printf(" Pt ");  
-        for (unsigned int i = 0; i < MAX_SIZE; i++) 
+        for (uint8_t i = 0; i < MAX_SIZE; i++) 
         {
 
             printf(";%0.f", *ptArr[i]);
@@ -34,7 +35,7 @@ void main(void)
 
         
         printf("dt");  
-        for (unsigned int i = 0; i < MAX_SIZE; i++) 
+        for (uint8_t i = 0; i < MAX_SIZE; i++) 
         {
             printf(";%.f", buffArr[i]);
         }

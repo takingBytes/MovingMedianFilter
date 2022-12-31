@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "median.h"
 
@@ -10,9 +11,9 @@ static float MedianValueGet(median* this);
 static void SwapPtPt(float **a, float **b);
 static void MedianSortingGapInit(median* this);
 
-extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, unsigned int size)
+extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, uint16_t size)
 {
-    if ((buffer == NULL)||(ptBufferSorted == NULL)||(size == 0))
+    if ((buffer == NULL)||(ptBufferSorted == NULL)||(size == 0)||(size > UINT8_MAX))
         return;
     
     this->buffer=buffer;
@@ -42,7 +43,7 @@ extern float MedianFilter(median* this,float input)
     return MedianValueGet(this);
 }
 
-extern unsigned int MedianIterationGet(median* this)
+extern uint8_t MedianIterationGet(median* this)
 {
     if (this == NULL)
         return 0;
@@ -77,13 +78,13 @@ static void MedianBufferClear(median* this)
     if (this == NULL)
         return;
 
-    for (unsigned int i = 0; i < this->size; i++) 
+    for (uint8_t i = 0; i < this->size; i++) 
         this->buffer[i] = 0;
 }
 
 static void MedianBufferInit(median* this)
 {
-    for (unsigned int i = 0; i < this->size; i++) 
+    for (uint8_t i = 0; i < this->size; i++) 
         this->ptBufferSorted[i] = &this->buffer[i];
 }
 
@@ -114,11 +115,11 @@ static void MedianBufferShellSort(median* this)
 
     this->iterationCount = 0;
 
-    unsigned int gap=this->initialKnuthGap;
+    uint8_t gap=this->initialKnuthGap;
 
     while (gap > 0)
     {
-        for (unsigned int  index = gap; index < this->size; index++)
+        for (uint8_t  index = gap; index < this->size; index++)
         {   
             float* currentElement = this->ptBufferSorted[index];
 
