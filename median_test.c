@@ -13,6 +13,13 @@ static float* ptBufferSortedEven[MEDIAN_SIZE_EVEN];
 
 static median medianFilterOdd,medianFilterEven;
 
+/*test function declarations*/
+static void TestMedianFilterConstantInputEven(void);
+static void TestMedianFilterConstantInputOdd(void);
+static void TestMedianFilterMixedInputOdd(void);
+static void TestMedianFilterTheoreticalMaxIterations(void);
+
+/*helper function declarations*/
 static uint8_t calcShellSortMaxIterations(uint8_t size);
 static void initBufferWithWorstCase(float* drain, float* source);
 
@@ -26,7 +33,7 @@ void tearDown(void)
 {
 }
 
-void TestMedianFilterConstantInputEven(void)
+static void TestMedianFilterConstantInputEven(void)
 {
     float input[MEDIAN_SIZE_EVEN] = {9,8,7,6,5,4,3,2,1,0};
     float expectedMedian[MEDIAN_SIZE_EVEN] = {0,0,0,0,2.5,4.5,4.5,4.5,4.5,4.5};
@@ -44,7 +51,7 @@ void TestMedianFilterConstantInputEven(void)
     }
 }
 
-void TestMedianFilterConstantInputOdd(void)
+static void TestMedianFilterConstantInputOdd(void)
 {
     float input[MEDIAN_SIZE_ODD] = {9,8,7,6,5,4,3,2,1};
     float expectedMedian[MEDIAN_SIZE_ODD] = {0,0,0,0,5,5,5,5,5};
@@ -62,7 +69,7 @@ void TestMedianFilterConstantInputOdd(void)
     }
 }
 
-void TestMedianFilterMixedInputOdd(void)
+static void TestMedianFilterMixedInputOdd(void)
 {
     // Test with odd-sized buffer
     float input[MEDIAN_SIZE_ODD] = {-9, 8, -7, 6, -5, 4, -3, 2, -1};
@@ -81,7 +88,7 @@ void TestMedianFilterMixedInputOdd(void)
     }
 }
 
-void TestMedianFilterTheoreticalMaxIterations(void)
+static void TestMedianFilterTheoreticalMaxIterations(void)
 {
     float input[MEDIAN_SIZE_ODD] = {9,8,7,6,5,4,3,2,1};
     float expectedMedian[MEDIAN_SIZE_ODD] = {0,0,0,0,5,5,5,5,5};
