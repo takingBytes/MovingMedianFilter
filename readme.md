@@ -67,6 +67,6 @@ Using the Knuth sequence, the worst and best case iterations for the shellsort a
 
 | Scenario | Iterations| Example|
 | --- | --- | --- |
-| Worstcase | $O(n) = \sum_{i=0}^n (n - gap(i)) - 1$| $O(9)=12$ |
+| Worstcase | $O(n) = {{{\sum}^n_{i=0}}} (n - gap(i)) - 1$| $O(9)=12$ |
 | Bestcase   | $O(n)=0$ |$O(9)=0$|
 | Worstcase *one* <br> changed value | $O(n)= (n-1)$ |$O(9)=8$|
