@@ -1,10 +1,10 @@
 # Moving Median Filter
 
-This project implements a moving median filter in C. The median filter takes in a stream of inputvalues and returns the median value over the buffer size. It does this by sorting the data points with the Shell sort alogorithm and selecting the middle value as the filtered output.
+This project implements a moving median filter in C. The median filter takes in a stream of input values and returns the median value over the buffer size. It does this by sorting the data points with the Shellsort alogorithm and selecting the middle value as the filtered output.
 
 ## Benefits of Using a Median Filter
 
--  Median filters are particularly effective at reducing the impact of isolated outliers or "peaks" in the data.
+- Median filters are particularly effective at reducing the impact of isolated outliers or "peaks" in the data.
 - They can be more robust to noise than other types of filters, such as moving average filters.
 
 ## Getting Started
@@ -51,14 +51,18 @@ int main()
 
 - `MedianInit()`: Initializes the median filter with a given buffer and size.
 - `MedianFilter()`: Adds a new value to the filter and returns the filtered output (the median value of the last `size` values).
-- `MedianIterationGet()`: Returns the number of iterations of the inner loop in the Shell sort algorithm.
+- `MedianIterationGet()`: Returns the number of iterations of the inner loop in the Shellsort algorithm.
 
-## Sorting Algorithm: Shell Sort
+## ShellSort Algorithm
 
-The median filter uses the Shell sort algorithm to sort the data points in the buffer. Shell sort is a sorting algorithm that works by comparing elements that are a certain distance apart (called the gap) and swapping them if they are in the wrong order. The gap size is gradually reduced until the list is fully sorted. The gap size can be calculated using the Knuth sequence to improve the performance of the algorithm. Shell sort is usally faster than some other simple sorting algorithms, such as insertion sort, because it takes advantage of the partially sorted nature of the list and performs fewer swaps and comparisons overall. 
+The median filter uses the Shellsort algorithm to sort the data points in the buffer. Shellsort is a sorting algorithm that works by comparing elements that are a certain distance apart (called the gap) and swapping them if they are in the wrong order. The gap size is gradually reduced until the list is fully sorted. When the gap size is down to 1, it behaves like a standard Insertionsort. The gap size is calculated by using the Knuth sequence to improve the performance of the algorithm. Shellsort is usally faster than some other simple sorting algorithms, because it takes advantage of the partially sorted nature of the buffer and performs fewer swaps and comparisons overall.
+
+The implementation used in this project takes advantage of the fact that sorting algorithms are much faster on partially sorted lists. To use this effect two buffers are used, a ring buffer containing the raw input values and another one containing a list of sorted pointers to the raw data.  With this adaptation, the complete list does not have to be re-sorted with each call of the filter function, but only the newly added value.
+
+Translated with www.DeepL.com/Translator (free version)
 
 | Knuth sequence | gap(0..i)=[1, 4, 13, 40,...] |
 | --- | --- |
-| Worstcase iterationcount | O(n)= ((n-gap(i=1))+(n-gap(i=2)...))-1<br>with: n=9 -> WC=12 |
-| Bestcase iterationcount | O(n)=0<br>with: n=9 -> WC=0 |
-| Worstcase iterationcount<br>with *one* changed value | O(n)= (n-1)<br>with: n=9 -> WC=8 |
+| Worstcase iteration count | O(n)= ((n-gap(i=1))+(n-gap(i=2)...))-1<br>with: n=9 -> WC=12 |
+| Bestcase iteration count | O(n)=0<br>with: n=9 -> WC=0 |
+| Worstcase iteration count<br>with *one* changed value | O(n)= (n-1)<br>with: n=9 -> WC=8 |
