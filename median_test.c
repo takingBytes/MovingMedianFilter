@@ -9,8 +9,8 @@
 #define MEDIAN_SIZE_ODD MEDIAN_SIZE_EVEN-1
 
 
-static float buffer[MEDIAN_SIZE_EVEN];
-static float* ptBufferSorted[MEDIAN_SIZE_EVEN];
+static float buffer[UINT8_MAX];
+static float* ptBufferSorted[UINT8_MAX];
 
 static median medianFilterOdd,medianFilterEven;
 
@@ -121,6 +121,10 @@ static void Test_PracticalMaxIterations(void)
 
 static void Test_InvalidSize(void)
 {
+
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, UINT8_MAX+1);
+    TEST_ASSERT_FALSE(medianFilterOdd.init);
+
     MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 0);
     TEST_ASSERT_FALSE(medianFilterOdd.init);
 
