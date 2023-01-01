@@ -57,10 +57,16 @@ int main()
 
 The median filter uses the Shellsort algorithm to sort the data points in the buffer. Shellsort is a sorting algorithm that works by comparing elements that are a certain distance apart (called the gap) and swapping them if they are in the wrong order. The gap size is gradually reduced until the list is fully sorted. When the gap size is down to 1, it behaves like a standard Insertionsort. The gap size is calculated by using the Knuth sequence to improve the performance of the algorithm. Shellsort is usally faster than some other simple sorting algorithms, because it takes advantage of the partially sorted nature of the buffer and performs fewer swaps and comparisons overall.
 
-The implementation used in this project takes advantage of the fact that sorting algorithms are much faster on partially sorted lists. To use this effect two buffers are used, a ring buffer containing the raw input values and another one containing a list of sorted pointers to the raw data. With this adaptation, the complete list does not have to be re-sorted with each call of the `MedianFilter()` function, but only the newly added value.
+This implementation leverages the fact that sorting algorithms tend to be faster on partially sorted lists by using two buffers: a ring buffer that stores the raw input values, and another buffer that holds a list of sorted pointers to the raw data. This allows the median filter to quickly find the median value without having to sort the entire list of values each time, improving the performance of the filter.
 
-| Knuth sequence | gap(0..i)=[1, 4, 13, 40,...] |
-| --- | --- |
-| Worstcase iteration count | O(n)= ((n-gap(i=1))+(n-gap(i=2)...))-1<br>with: n=9 -> WC=12 |
-| Bestcase iteration count | O(n)=0<br>with: n=9 -> WC=0 |
-| Worstcase iteration count<br>with *one* changed value | O(n)= (n-1)<br>with: n=9 -> WC=8 |
+| Knuth gap sequence |
+| --- |
+| gap<sub>knuth</sub>(i) = {1, 4, 13, 40, ...} |
+
+Using the Knuth sequence, the worst and best case iterations for the shellsort algorithm are as follows:
+
+| Scenario | Iterations| Example|
+| --- | --- | --- |
+| Worstcase | $O(n) = \sum_{i=0}^n (n - gap(i)) - 1$| $O(9)=12$ |
+| Bestcase   | $O(n)=0$ |$O(9)=0$|
+| Worstcase *one* <br> changed value | $O(n)= (n-1)$ |$O(9)=8$|
