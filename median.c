@@ -13,15 +13,22 @@ static void MedianSortingGapInit(median* this);
 
 extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, uint16_t size)
 {
-    if ((buffer == NULL)||(ptBufferSorted == NULL)||(size == 0)||(size > UINT8_MAX))
+    if (this == NULL)
+    {
         return;
-    
+    }
+    else if ((buffer == NULL)||(ptBufferSorted == NULL)||(size < 3)||(size > UINT8_MAX))
+    {
+        this->init=false;
+        return;
+    }
+
     this->buffer=buffer;
     this->ptBufferSorted=ptBufferSorted;
     this->size=size;
     this->index=0;
     this->initialKnuthGap=1;
-
+    this->init=true;
 
     MedianBufferClear(this);
     MedianBufferInit(this);
@@ -30,7 +37,7 @@ extern void MedianInit(median* this, float* buffer,float** ptBufferSorted, uint1
 
 extern float MedianFilter(median* this,float input)
 {
-    if (this == NULL)
+    if ((this == NULL)||(this->init==false))
         return 0;
 
     this->buffer[this->index] = input;
@@ -45,7 +52,7 @@ extern float MedianFilter(median* this,float input)
 
 extern uint8_t MedianIterationGet(median* this)
 {
-    if (this == NULL)
+    if ((this == NULL)||(this->init==false))
         return 0;
 
     return this->iterationCount;
