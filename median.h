@@ -9,6 +9,7 @@ typedef struct Median
     uint8_t index;
     uint8_t iterationCount;
     uint8_t initialKnuthGap;
+    bool init;
 } median;
 
 extern median Median;
