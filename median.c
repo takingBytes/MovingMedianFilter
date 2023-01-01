@@ -97,26 +97,6 @@ static void MedianBufferInit(median* this)
 
 static void MedianBufferShellSort(median* this)
 {
-    /*
-    When  type == SHELL
-
-    Knuth sequence:  gap(0..i)=[1, 4, 13, 40,...]
-    wc iteration count for inner loop:
-    O(n)= (n-gap(i=1))+(n-gap(i=2))     e.g.: n=9 -> WC=13;
-
-    bc iteration count for inner loop:
-    O(n)= (n-gap(i=1))+(n-gap(i=2))     e.g.: n=9 -> WC=13;
-
-    wc swap count:
-    O(n)= ((n-gap(i=1))+(n-gap(i=2)))-1 e.g.: n=9 -> WC=12;
-
-    bc swap count: 
-    O(n)=0                              e.g.: n=9 -> WC=0;        
-
-    wc swap count with *one* changed value: 
-    O(n)= (n-1)                         e.g.: n=9 -> WC=8; 
-    */
-
     if (this == NULL)
         return;
 
