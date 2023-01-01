@@ -44,12 +44,6 @@ static void Test_ConstantInput_Even(void)
     {
         float median = MedianFilter(&medianFilterEven, input[i]);
         TEST_ASSERT_EQUAL_FLOAT(expected[i], median); 
-
-        for (uint8_t j = 0; j < MEDIAN_SIZE_EVEN; j++) 
-        {
-            printf("%.f;", *ptBufferSorted[j]);
-        }
-            printf(" med->  %0.1f\n", median);
     }
 }
 
@@ -62,12 +56,6 @@ static void Test_ConstantInput_Odd(void)
     {
         float median = MedianFilter(&medianFilterOdd, input[i]);
         TEST_ASSERT_EQUAL_FLOAT(expected[i], median); 
-
-        for (uint8_t j = 0; j < MEDIAN_SIZE_ODD; j++) 
-        {
-            printf("%.f;", *ptBufferSorted[j]);
-        }
-            printf(" med->  %0.1f\n", median);
     }
 }
 
@@ -80,12 +68,6 @@ static void Test_MixedInput_Odd(void)
     {
         float median = MedianFilter(&medianFilterOdd, input[i]);
         TEST_ASSERT_EQUAL_FLOAT(expected[i], median); 
-
-         for (uint8_t j = 0; j < MEDIAN_SIZE_ODD; j++) 
-        {
-            printf("%.f;", *ptBufferSorted[j]);
-        }
-            printf(" med->  %0.1f\n", median);
     }
 }
 
@@ -99,7 +81,7 @@ static void Test_TheoreticalMaxIterations(void)
     float result = MedianFilter(&medianFilterOdd, input[0]);
     uint8_t iterations = MedianIterationGet(&medianFilterOdd);
     TEST_ASSERT_EQUAL_UINT8(maxIteration, iterations); 
-    printf("Theoretical-Max-Iterations->  %i\n", iterations);
+    printf("Theoretical-Max-Iterations (n=%i) -> %i\n",MEDIAN_SIZE_ODD, iterations);
 }
 
 static void Test_PracticalMaxIterations(void)
@@ -113,7 +95,7 @@ static void Test_PracticalMaxIterations(void)
     uint8_t iterations = MedianIterationGet(&medianFilterOdd);
     TEST_ASSERT_EQUAL_UINT8(maxIteration, iterations); 
 
-    printf("Practical-Max-Iterations->  %i\n", iterations);
+    printf("Practical-Max-Iterations (n=%i) -> %i\n",MEDIAN_SIZE_ODD, iterations);
 }
 
 static void Test_InvalidSizeInit(void)
@@ -145,15 +127,8 @@ static void Test_MinSize(void)
     {
         float result = MedianFilter(&medianFilterMin, input[i]);
         TEST_ASSERT_EQUAL_FLOAT(expected[i], result); 
-
-        for (uint8_t j = 0; j < MEDIAN_SIZE_MIN; j++) 
-        {
-            printf("%.f;", *ptBufferSorted[j]);
-        }
-            printf(" med->  %0.1f\n", result);
     }
 }
-
 
 static void Test_MaxSize(void)
 {
@@ -172,7 +147,6 @@ static void Test_MaxSize(void)
         }
     }
 }
-
 
 /*helper functions*/
 static void Buffer_Init(float* drain, float* source)
