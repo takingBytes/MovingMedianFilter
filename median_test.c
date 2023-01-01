@@ -5,14 +5,12 @@
 #include "median.h"
 #include "unity.h"
 
-#define MEDIAN_SIZE_ODD 9
-#define MEDIAN_SIZE_EVEN MEDIAN_SIZE_ODD+1
+#define MEDIAN_SIZE_EVEN 10
+#define MEDIAN_SIZE_ODD MEDIAN_SIZE_EVEN-1
 
-static float bufferOdd[MEDIAN_SIZE_ODD];
-static float* ptBufferSortedOdd[MEDIAN_SIZE_ODD];
 
-static float bufferEven[MEDIAN_SIZE_EVEN];
-static float* ptBufferSortedEven[MEDIAN_SIZE_EVEN];
+static float buffer[MEDIAN_SIZE_EVEN];
+static float* ptBufferSorted[MEDIAN_SIZE_EVEN];
 
 static median medianFilterOdd,medianFilterEven;
 
@@ -22,6 +20,7 @@ static void Test_ConstantInput_Odd(void);
 static void Test_MixedInput_Odd(void);
 static void Test_TheoreticalMaxIterations(void);
 static void Test_PracticalMaxIterations(void);
+static void Test_InvalidSize(void);
 
 
 /*helper function declarations*/
@@ -30,8 +29,8 @@ static void Buffer_Init(float* drain, float* source);
 
 void setUp(void)
 {  
-    MedianInit(&medianFilterOdd, bufferOdd, ptBufferSortedOdd, MEDIAN_SIZE_ODD);
-    MedianInit(&medianFilterEven, bufferEven, ptBufferSortedEven, MEDIAN_SIZE_EVEN);
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, MEDIAN_SIZE_ODD);
+    MedianInit(&medianFilterEven, buffer, ptBufferSorted, MEDIAN_SIZE_EVEN);
 }
 
 void tearDown(void)
@@ -45,14 +44,14 @@ static void Test_ConstantInput_Even(void)
 
     for (uint8_t i = 0; i < MEDIAN_SIZE_EVEN; i++)
     {
-        float result = MedianFilter(&medianFilterEven, input[i]);
-        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], result); 
+        float median = MedianFilter(&medianFilterEven, input[i]);
+        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], median); 
 
         for (uint8_t j = 0; j < MEDIAN_SIZE_EVEN; j++) 
         {
-            printf("%.f;", *ptBufferSortedEven[j]);
+            printf("%.f;", *ptBufferSorted[j]);
         }
-            printf("->  %0.1f\n", result);
+            printf(" med->  %0.1f\n", median);
     }
 }
 
@@ -63,33 +62,32 @@ static void Test_ConstantInput_Odd(void)
 
     for (uint8_t i = 0; i < MEDIAN_SIZE_ODD; i++)
     {
-        float result = MedianFilter(&medianFilterOdd, input[i]);
-        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], result); 
+        float median = MedianFilter(&medianFilterOdd, input[i]);
+        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], median); 
 
         for (uint8_t j = 0; j < MEDIAN_SIZE_ODD; j++) 
         {
-            printf("%.f;", *ptBufferSortedOdd[j]);
+            printf("%.f;", *ptBufferSorted[j]);
         }
-            printf("med->  %0.1f", result);
+            printf(" med->  %0.1f\n", median);
     }
 }
 
 static void Test_MixedInput_Odd(void)
 {
-
     float input[MEDIAN_SIZE_ODD] = {-9,8,-7,6,-5,4,-3,2,-1};
     float expectedMedian[MEDIAN_SIZE_ODD] = {0,0,0,0,0,0,0,0,-1};
 
     for (uint8_t i = 0; i < MEDIAN_SIZE_ODD; i++)
     {
-        float result = MedianFilter(&medianFilterOdd, input[i]);
-        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], result); 
+        float median = MedianFilter(&medianFilterOdd, input[i]);
+        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], median); 
 
          for (uint8_t j = 0; j < MEDIAN_SIZE_ODD; j++) 
         {
-            printf("%.f;", *ptBufferSortedOdd[j]);
+            printf("%.f;", *ptBufferSorted[j]);
         }
-            printf("->  %0.1f\n", result);
+            printf(" med->  %0.1f\n", median);
     }
 }
 
@@ -97,7 +95,7 @@ static void Test_TheoreticalMaxIterations(void)
 {
     float input[MEDIAN_SIZE_ODD] = {9,8,7,6,5,4,3,2,1};
 
-    Buffer_Init(bufferOdd,input);
+    Buffer_Init(buffer,input);
     
     uint8_t maxIteration =ShellSortIterations_Calc(MEDIAN_SIZE_ODD);
 
@@ -111,7 +109,7 @@ static void Test_PracticalMaxIterations(void)
 {
     float input[MEDIAN_SIZE_ODD] = {1,2,3,4,5,6,7,8,9};
 
-    Buffer_Init(bufferOdd,input);
+    Buffer_Init(buffer,input);
     uint8_t maxIteration =MEDIAN_SIZE_ODD-1;
 
     float result = MedianFilter(&medianFilterOdd, input[maxIteration]+1);
@@ -123,17 +121,38 @@ static void Test_PracticalMaxIterations(void)
 
 static void Test_InvalidSize(void)
 {
-    MedianInit(&medianFilterOdd, bufferOdd, ptBufferSortedOdd, 0);
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 0);
     TEST_ASSERT_FALSE(medianFilterOdd.init);
 
-    MedianInit(&medianFilterOdd, bufferOdd, ptBufferSortedOdd, 1);
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 1);
     TEST_ASSERT_FALSE(medianFilterOdd.init);
 
-    MedianInit(&medianFilterOdd, bufferOdd, ptBufferSortedOdd, 2);
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 2);
     TEST_ASSERT_FALSE(medianFilterOdd.init);
 
-    MedianInit(&medianFilterOdd, bufferOdd, ptBufferSortedOdd, 3);
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 3);
     TEST_ASSERT_TRUE(medianFilterOdd.init);    
+}
+
+static void Test_MinSize(void)
+{
+    MedianInit(&medianFilterOdd, buffer, ptBufferSorted, 3);
+    const uint8_t minSize=3;
+
+    float input[] = {3,2,1,3,2,1};
+    float expectedMedian[] = {0,2,2,2,2,2};
+
+    for (uint8_t i = 0; i < minSize*2; i++)
+    {
+        float result = MedianFilter(&medianFilterOdd, input[i]);
+        TEST_ASSERT_EQUAL_FLOAT(expectedMedian[i], result); 
+
+        for (uint8_t j = 0; j < minSize; j++) 
+        {
+            printf("%.f;", *ptBufferSorted[j]);
+        }
+            printf(" med->  %0.1f\n", result);
+    }
 }
 
 
@@ -150,13 +169,14 @@ static void Buffer_Init(float* drain, float* source)
 static uint8_t ShellSortIterations_Calc(uint8_t size)
 {
     uint8_t gap = 1;
-    uint8_t maxIteration =MEDIAN_SIZE_ODD - 2;
+    uint8_t maxIteration = size - gap;
 
-    while (gap < MEDIAN_SIZE_ODD / 3)
+    while (gap < size / 3)
     {
         gap = gap * 3 + 1;
-        maxIteration += MEDIAN_SIZE_ODD - gap;
+        maxIteration += size - gap;
     }
+    maxIteration=maxIteration-1;
 
     return maxIteration; 
 }
@@ -170,5 +190,6 @@ int main(void)
     RUN_TEST(Test_TheoreticalMaxIterations);
     RUN_TEST(Test_PracticalMaxIterations);
     RUN_TEST(Test_InvalidSize);
+    RUN_TEST(Test_MinSize);
     return UNITY_END();
 }
